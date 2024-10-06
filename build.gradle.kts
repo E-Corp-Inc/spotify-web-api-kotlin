@@ -6,6 +6,8 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackOutput.Target
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     kotlin("multiplatform")
@@ -410,7 +412,9 @@ fun MavenPublication.setupPom(publicationName: String) {
     }
 }
 
-
+fun readEnvProperties(name: String = "env.properties") = Properties().apply properties@{
+    FileInputStream(name).use { inputStream -> this@properties.load(inputStream) }
+}
 // --- Publishing ---
 
 fun PublishingExtension.registerPublishing() {
@@ -423,18 +427,25 @@ fun PublishingExtension.registerPublishing() {
 
     repositories {
         maven {
-            name = "nexus"
-
-            // Publishing locations
-            val releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            val snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-
-            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
-
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/E-Corp-Inc/spotify-web-api-kotlin")
             credentials {
-                username = nexusUsername
-                password = nexusPassword
+                val env = readEnvProperties()
+                username = env.getProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = env.getProperty("gpr.key") ?: System.getenv("TOKEN")
             }
+//            name = "nexus"
+//
+//            // Publishing locations
+//            val releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+//            val snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+//
+//            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
+//
+//            credentials {
+//                username = nexusUsername
+//                password = nexusPassword
+//            }
         }
     }
 }

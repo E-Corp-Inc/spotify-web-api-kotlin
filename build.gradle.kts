@@ -37,7 +37,7 @@ buildscript {
 }
 
 // --- spotify-web-api-kotlin info ---
-val libraryVersion: String = System.getenv("SPOTIFY_API_PUBLISH_VERSION") ?: "0.0.0.SNAPSHOT"
+val libraryVersion: String = System.getenv("SPOTIFY_API_PUBLISH_VERSION") ?: "4.1.4-SNAPSHOT"
 
 // Publishing credentials (environment variable)
 val nexusUsername: String? = System.getenv("NEXUS_USERNAME")

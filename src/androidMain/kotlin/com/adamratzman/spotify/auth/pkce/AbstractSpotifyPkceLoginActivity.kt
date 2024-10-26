@@ -117,9 +117,9 @@ public abstract class AbstractSpotifyPkceLoginActivity : AppCompatActivity() {
     /**
      * User accepted Spotify permissions at the website and has been redirected to the app
      */
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        if (intent?.data != null) setIntent(intent)
+        if (intent.data != null) setIntent(intent)
     }
 
     /**

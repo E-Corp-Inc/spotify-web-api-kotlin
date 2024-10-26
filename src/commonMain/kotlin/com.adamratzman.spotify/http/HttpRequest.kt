@@ -12,7 +12,6 @@ import com.adamratzman.spotify.models.SpotifyRatelimitedException
 import com.adamratzman.spotify.models.serialization.nonstrictJson
 import com.adamratzman.spotify.models.serialization.toObject
 import com.soywiz.klogger.Console
-import com.soywiz.korio.async.launch
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.HttpRequestBuilder
@@ -26,7 +25,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.content.ByteArrayContent
 import io.ktor.utils.io.core.toByteArray
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
@@ -44,6 +42,8 @@ public data class HttpHeader(val key: String, val value: String)
 public data class HttpResponse(val responseCode: Int, val body: String, val headers: List<HttpHeader>)
 
 public typealias HttpConnection = HttpRequest
+
+internal expect val customHttpClient: Any?
 
 /**
  * Provides a fast, easy, and slim way to execute and retrieve HTTP GET, POST, PUT, and DELETE requests
@@ -251,8 +251,9 @@ public class HttpRequest constructor(
     }
 
     internal companion object {
-        internal val httpClient = HttpClient {
+        internal val httpClient = (customHttpClient as? HttpClient) ?: HttpClient {
             expectSuccess = false
         }
     }
 }
+

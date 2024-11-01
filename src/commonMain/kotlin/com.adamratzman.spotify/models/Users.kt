@@ -88,7 +88,7 @@ public data class Followers(
 )
 
 // custom serializer to convert total (which now is a double from spotify's response) to int, because it should be an int
-private object FollowersSerializer : KSerializer<Followers> {
+internal object FollowersSerializer : KSerializer<Followers> {
     override val descriptor: SerialDescriptor = buildClassSerialDescriptor("Followers") {
         element<String?>("href")
         element<Int?>("total")

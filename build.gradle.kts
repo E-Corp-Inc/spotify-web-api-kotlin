@@ -1,13 +1,18 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.fasterxml.jackson.databind.json.JsonMapper
+import org.gradle.kotlin.dsl.assign
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackOutput.Target
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileInputStream
 import java.util.Properties
+import kotlin.apply
 
 plugins {
     kotlin("multiplatform")
@@ -17,7 +22,7 @@ plugins {
     kotlin("plugin.serialization")
     id("com.diffplug.spotless") version "6.21.0"
     id("com.moowork.node") version "1.3.1"
-    id("org.jetbrains.dokka") version "1.9.0"
+    id("org.jetbrains.dokka") version "2.0.0"
 }
 
 repositories {
@@ -37,7 +42,7 @@ buildscript {
 }
 
 // --- spotify-web-api-kotlin info ---
-val libraryVersion: String = System.getenv("SPOTIFY_API_PUBLISH_VERSION") ?: "4.1.7-SNAPSHOT"
+val libraryVersion: String = System.getenv("SPOTIFY_API_PUBLISH_VERSION") ?: "4.1.9-SNAPSHOT"
 
 // Publishing credentials (environment variable)
 val nexusUsername: String? = System.getenv("NEXUS_USERNAME")
@@ -92,7 +97,11 @@ kotlin {
     jvmToolchain(17)
 
     androidTarget {
-        compilations.all { kotlinOptions.jvmTarget = "17" }
+        tasks.withType<KotlinCompile>().configureEach {
+            compilerOptions {
+                jvmTarget = JvmTarget.JVM_17
+            }
+        }
 
         mavenPublication { setupPom(artifactId) }
 
@@ -102,8 +111,10 @@ kotlin {
     }
 
     jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "1.8"
+        tasks.withType<KotlinCompile>().configureEach {
+            compilerOptions {
+                jvmTarget = JvmTarget.JVM_17
+            }
         }
         testRuns["test"].executionTask.configure {
             useJUnit()
@@ -315,11 +326,11 @@ kotlin {
         }
     }
 
-    publishing {
-        registerPublishing()
-    }
 }
 
+publishing {
+    registerPublishing(publishingExtension = this@publishing)
+}
 tasks {
     dokkaHtml {
         outputDirectory.set(projectDir.resolve("docs"))
@@ -365,7 +376,7 @@ tasks {
         val targetName = "ios" + if (sdkName.startsWith("iphoneos")) "Arm64" else "X64"
         val framework = kotlin.targets.getByName<KotlinNativeTarget>(targetName).binaries.getFramework(mode)
         inputs.property("mode", mode)
-        dependsOn(framework.linkTask)
+        dependsOn(framework.linkTaskProvider)
         val targetDir = File(layout.buildDirectory.asFile.get(), "xcode-frameworks")
         from({ framework.outputDirectory })
         into(targetDir)
@@ -417,35 +428,26 @@ fun readEnvProperties(name: String = "env.properties") = Properties().apply prop
 }
 // --- Publishing ---
 
-fun PublishingExtension.registerPublishing() {
-    publications {
-        val kotlinMultiplatform by getting(MavenPublication::class) {
-            artifactId = "spotify-api-kotlin-core"
-            setupPom(artifactId)
-        }
-    }
+fun Project.registerPublishing(publishingExtension: PublishingExtension) {
+    publishingExtension.apply {
 
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/E-Corp-Inc/spotify-web-api-kotlin")
-            credentials {
-                val env = readEnvProperties()
-                username = env.getProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = env.getProperty("gpr.key") ?: System.getenv("TOKEN")
+        publications {
+            val kotlinMultiplatform by getting(MavenPublication::class) {
+                artifactId = "spotify-api-kotlin-core"
+                setupPom(artifactId)
             }
-//            name = "nexus"
-//
-//            // Publishing locations
-//            val releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-//            val snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-//
-//            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
-//
-//            credentials {
-//                username = nexusUsername
-//                password = nexusPassword
-//            }
+        }
+
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/E-Corp-Inc/spotify-web-api-kotlin")
+                credentials {
+                    val env = readEnvProperties()
+                    username = env.getProperty("gpr.user") ?: System.getenv("USERNAME")
+                    password = env.getProperty("gpr.key") ?: System.getenv("TOKEN")
+                }
+            }
         }
     }
 }

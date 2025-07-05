@@ -11,7 +11,6 @@ import com.adamratzman.spotify.models.ErrorResponse
 import com.adamratzman.spotify.models.SpotifyRatelimitedException
 import com.adamratzman.spotify.models.serialization.nonstrictJson
 import com.adamratzman.spotify.models.serialization.toObject
-import com.soywiz.klogger.Console
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.HttpRequestBuilder
@@ -24,6 +23,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.content.ByteArrayContent
 import io.ktor.utils.io.core.toByteArray
+import korlibs.logger.Console
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable

@@ -1,12 +1,13 @@
 /* Spotify Web API, Kotlin Wrapper; MIT License, 2017-2022; Original author: Adam Ratzman */
 package com.adamratzman.spotify.utils
 
-import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.format.jpg.JPEG
-import com.soywiz.korio.file.VfsFile
-import com.soywiz.korio.file.std.UrlVfs
-import com.soywiz.korio.file.std.localVfs
-import com.soywiz.krypto.encoding.Base64
+import korlibs.crypto.encoding.Base64
+import korlibs.image.bitmap.Bitmap
+import korlibs.io.file.VfsFile
+import korlibs.io.file.std.UrlVfs
+import korlibs.io.file.std.localVfs
+
 
 /**
  * Represents an image. Please use convertXToBufferedImage and convertBufferedImageToX methods to read and write [BufferedImage]

@@ -2,8 +2,9 @@
 package com.adamratzman.spotify.utils
 
 import io.ktor.http.encodeURLQueryComponent
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 internal actual fun String.encodeUrl() = encodeURLQueryComponent()
 
@@ -19,11 +20,13 @@ public actual fun <K, V> ConcurrentHashMap<K, V>.asList(): List<Pair<K, V>> = to
 /**
  * The current time in milliseconds since UNIX epoch.
  */
+@OptIn(ExperimentalTime::class)
 public actual fun getCurrentTimeMs(): Long = Clock.System.now().toEpochMilliseconds()
 
 /**
  * Format date to ISO 8601 format
  */
+@OptIn(ExperimentalTime::class)
 internal actual fun formatDate(date: Long): String {
     return Instant.fromEpochMilliseconds(date).toString()
 }

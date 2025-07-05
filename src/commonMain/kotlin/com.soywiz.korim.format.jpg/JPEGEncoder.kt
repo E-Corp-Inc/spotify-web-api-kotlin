@@ -1,8 +1,8 @@
 /* Spotify Web API, Kotlin Wrapper; MIT License, 2017-2022; Original author: Adam Ratzman */
 package com.soywiz.korim.format.jpg
 
-import com.soywiz.kmem.ByteArrayBuilder
-import com.soywiz.korim.bitmap.Bitmap32
+import korlibs.image.bitmap.Bitmap32
+import korlibs.memory.ByteArrayBuilder
 import kotlin.math.floor
 
 /*

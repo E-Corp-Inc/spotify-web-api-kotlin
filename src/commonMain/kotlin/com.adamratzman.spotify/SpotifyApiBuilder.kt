@@ -9,9 +9,9 @@ import com.adamratzman.spotify.models.Token
 import com.adamratzman.spotify.models.serialization.nonstrictJson
 import com.adamratzman.spotify.models.serialization.toObject
 import com.adamratzman.spotify.utils.urlEncodeBase64String
-import com.soywiz.krypto.SHA256
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.utils.io.core.toByteArray
+import korlibs.crypto.SHA256
 import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.json.Json
 

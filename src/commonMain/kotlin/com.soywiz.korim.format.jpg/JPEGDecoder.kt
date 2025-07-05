@@ -1,12 +1,13 @@
 /* Spotify Web API, Kotlin Wrapper; MIT License, 2017-2022; Original author: Adam Ratzman */
 package com.soywiz.korim.format.jpg
 
-import com.soywiz.kmem.UByteArrayInt
-import com.soywiz.kmem.asByteArray
-import com.soywiz.korim.bitmap.Bitmap32
-import com.soywiz.korim.color.RGBA
-import com.soywiz.korim.color.decodeToBitmap32
-import com.soywiz.korio.lang.invalidOp
+
+import korlibs.image.bitmap.Bitmap32
+import korlibs.image.color.RGBA
+import korlibs.image.color.decodeToBitmap32
+import korlibs.io.lang.invalidOp
+import korlibs.memory.UByteArrayInt
+import korlibs.memory.asByteArray
 import kotlin.math.ceil
 
 // https://github.com/eugeneware/jpeg-js/blob/652bfced3ead53808285b1b5fa9c0b589d00bbf0/lib/decoder.js

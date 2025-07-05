@@ -1,0 +1,226 @@
+[versions]
+
+
+androidRetrofuture = "1.7.4"
+bcutilJdk18on = "1.81"
+composeHotReloadPlugin = "1.0.0-beta01"
+firebaseCommon = "2.1.0"
+jsoup = "1.21.1"
+kase64 = "1.3.1"
+korim = "4.0.10"
+kotlinReflect = "2.1.21"
+kotlinxCoroutinesCore = "1.7.3"
+kotlinxCoroutinesTest = "1.7.3"
+kotlinxDatetimeVersion = "0.5.0"
+kotlinxSerializationJsonVersion = "1.6.2"
+kotzillaPluginVersion = "1.0.1"
+krypto = "4.0.10"
+mockative = "3.0.1"
+mockativeProcessor = "3.0.0"
+sparkCore = "2.9.4"
+targetSdk = "36"
+compileSdk = "36"
+minSdk = "28"
+
+accompanist = "0.28.0"
+androidDesugarJdkLibs = "2.1.5"
+androidGradlePlugin = "8.11.0"
+# warning fun onNewIntent(intent: Intent):Unit defined in net.ecorp.apis.feature.login.activity.SpotifyPkceLoginActivity
+androidxActivity = "1.10.1"
+androidxAppCompat = "1.7.1"
+androidxBrowser = "1.7.0"
+androidxComposeBom = "2025.06.01"
+androidxComposeCompiler = "1.5.14"
+androidxComposeMaterial3Adaptive = "1.1.0"
+androidxComposeRuntimeTracing = "1.8.3"
+androidXConstraintLayout = "1.1.1"
+androidxCore = "1.16.0"
+androidxCoreSplashscreen = "1.0.1"
+androidxDataStore = "1.1.7"
+androidxEspresso = "3.6.1"
+androidxHiltNavigationCompose = "1.2.0"
+# java.lang.IllegalStateException: CompositionLocal LocalLifecycleOwner not present
+androidxLifecycle = "2.9.1"
+androidxMacroBenchmark = "1.3.4"
+androidxMetrics = "1.0.0-alpha04"
+androidxNavigation = "2.8.3"
+androidxProfileinstaller = "1.4.1"
+androidxStartup = "1.1.1"
+androidxTestCore = "1.6.1"
+androidxTestExt = "1.2.1"
+androidxTestRules = "1.6.1"
+androidxTestRunner = "1.6.2"
+androidxTracing = "1.3.0"
+androidxUiAutomator = "2.3.0"
+androidxWindowManager = "1.4.0"
+androidxWork = "2.10.2"
+atomicfu = "0.29.0"
+benManesVersionPlugin = "0.52.0"
+buildkonfig = "0.17.1"
+arrow = "2.1.2"
+coil = "2.7.0"
+coil3 = "3.2.0"
+coil3-network-android = "3.0.0-alpha08"
+coilNetworkKtor = "3.0.0-alpha01"
+coilNetworkOkhttp = "3.0.0-alpha01"
+compose-plugin = "1.8.2"
+compose-cmp = "1.7.3"
+composeRuntime="1.8.0"
+compose-settings = "2.10.0"
+coreSplashscreen = "1.1.0-rc01"
+datastorePreferences = "1.1.7"
+detekt = "1.23.8"
+detektFormatting = "1.23.8"
+detektRulesCompose = "1.4.0"
+ecorp = "6.0.2"
+firebaseBom = "33.16.0"
+firebaseCrashlyticsPlugin = "3.0.4"
+firebasePerfPlugin = "1.4.2"
+gmsPlugin = "4.4.3"
+graphGenerator = "0.8.0"
+hilt = "2.56.2"
+hiltExt = "1.2.0"
+jacoco = "0.8.7"
+javaxInject = "1"
+junit = "1.2.1"
+junit4 = "4.13.2"
+junit5 = "5.13.3"
+kache = "2.1.1"
+kotest = "5.9.1"
+kotlin = "2.2.0"
+kermit = "2.0.6"
+koin = "4.1.0"
+koin-compose-multiplatform = "1.2.0-Beta4"
+koin-multiplatform = "4.1.0-Beta8"
+koin-annotations = "2.1.0"
+koin-test = "4.0.0-RC1"
+kottie = "2.0.1"
+kotlinxCollections = "0.4.0"
+kotlinxCoroutines = "1.10.2"
+kotlinxDatetime = "0.7.0"
+kotlinxSerializationCoreVersion = "1.7.1"
+kotlinxSerializationJson = "1.9.0"
+kotzillaPlugin = "0.13.6"
+kotzillaSdk = "1.1.0"
+kotlinxSerializationProtobuf = "1.7.1"
+kotlinxUuidVersion = "0.0.1"
+ksp = "2.2.0-2.0.2"
+ktor = "2.3.8"
+ktorfit = "2.6.0"
+# java.lang.IllegalStateException: CompositionLocal LocalLifecycleOwner not present
+lifecycleProcess = "2.9.1"
+lifecycleRuntimeKtx = "2.8.4"
+lint = "31.1.4"
+lottie = "6.6.7"
+material = "1.12.0"
+mockk = "1.14.4"
+moko = "0.25.0"
+multiDexApplication = "2.0.1"
+napier = "2.7.1"
+navigation = "2.9.1"
+navigationCompose = "2.9.0-beta03"
+navigationRuntimeKtx = "2.8.3"
+newrelic = "7.6.7"
+okhttp = "4.12.0"
+okio = "3.15.0"
+paging-compose-version = "3.3.0-alpha02-0.5.1"
+pagingVersion = "3.3.6"
+protobuf = "4.31.1"
+protobufPlugin = "0.9.5"
+retrofit = "3.0.0"
+retrofitKotlinxSerializationJson = "1.0.0"
+retrofitOkhttp = "4.12.0"
+robolectric = "4.15.1"
+roborazzi = "1.45.1"
+room = "2.7.2"
+securityCryptoRef = "1.1.0-beta01"
+sentry = "5.8.0"
+sentryKotlinMultiplatform = "8.16.0"
+sentryKotlinMultiplatformFradle = "0.13.0"
+shared-module-version = "0.9.1"
+skie = "0.10.4"
+sonarqube = "6.2.0.5505"
+stately="2.1.0"
+swiftklib = "0.6.4"
+spotifyApiKotlin = "4.1.7-SNAPSHOT"
+sqlite = "2.5.2"
+store5 = "5.0.0"
+turbine = "1.2.1"
+org-jetbrains-kotlin-android = "1.9.24"
+urlencoderLib = "1.6.0"
+wire = "5.3.3"
+workTesting = "2.9.0"
+navigationRuntimeKtxVersion = "2.7.7"
+benchmarkMacroJunit4 = "1.3.4"
+
+
+[libraries]
+android-retrofuture = { module = "net.sourceforge.streamsupport:android-retrofuture", version.ref = "androidRetrofuture" }
+korim = { module = "com.soywiz.korlibs.korim:korim", version.ref = "korim" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kotlinx-serialization-protobuf = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-protobuf", version.ref = "kotlinxSerializationJson" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationJson" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+krypto = { module = "com.soywiz.korlibs.krypto:krypto", version.ref = "krypto" }
+ktorfit = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib", version.ref = "ktorfit" }
+ktorfit-annotations = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-annotations", version.ref = "ktorfit" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-client-jvm = { module = "io.ktor:ktor-client-jvm", version.ref = "ktor" }
+ktor-client-content-negociation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-content-encoding = { module = "io.ktor:ktor-client-encoding", version.ref = "ktor" }
+ktor-client-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktor" }
+ktor-client-json = { module = "io.ktor:ktor-client-json", version.ref = "ktor" }
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
+
+
+# Dependencies of the included build-logic
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+spark-core = { module = "com.sparkjava:spark-core", version.ref = "sparkCore" }
+[bundles]
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacroBenchmark" }
+buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
+compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-hotReload = { id="org.jetbrains.compose.hot-reload", version.ref = "composeHotReloadPlugin"}
+
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+#dependency-graph-generator = { id = "com.vanniktech.dependency.graph.generator", version.ref = "graphGenerator" }
+#github-benmanes-version = { id = "com.github.ben-manes.versions", version.ref = "benManesVersionPlugin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
+firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
+gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinx-swing = { id = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinxCoroutines" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+io-mockative = { id = "io.mockative", version.ref = "mockative" }
+multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+room = { id = "androidx.room", version.ref = "room" }
+safeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
+sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
+sentry-kotlin-multiplatform = { id = "io.sentry.kotlin.multiplatform.gradle", version.ref = "sentryKotlinMultiplatformFradle" }
+
+skie = { id = "co.touchlab.skie", version.ref = "skie" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
+swiftklib = { id = "io.github.ttypic.swiftklib", version.ref = "swiftklib" }
+wire = { id = "com.squareup.wire", version.ref = "wire" }

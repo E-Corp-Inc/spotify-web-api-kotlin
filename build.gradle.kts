@@ -31,7 +31,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:") // resolved in settings.gradle.kts
+        classpath(libs.android.gradlePlugin) // resolved in settings.gradle.kts
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:") // resolved in settings.gradle.kts
     }
 }
@@ -49,7 +49,7 @@ version = libraryVersion
 
 android {
     namespace = "com.adamratzman.spotify"
-    compileSdk = 31
+    compileSdk = 36
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -186,18 +186,18 @@ kotlin {
 
         commonMain {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("com.soywiz.korlibs.krypto:krypto:$korlibsVersion")
-                implementation("com.soywiz.korlibs.korim:korim:$korlibsVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinxDatetimeVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.ktor.client.core)
+                implementation(libs.krypto)
+                implementation(libs.korim)
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.kotlinx.coroutines.core)
             }
         }
 
         commonTest {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
+                implementation(libs.kotlinx.coroutines.test)
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
             }
@@ -207,14 +207,14 @@ kotlin {
             dependsOn(commonMain.get())
 
             dependencies {
-                implementation("net.sourceforge.streamsupport:android-retrofuture:1.7.3")
+                implementation(libs.android.retrofuture)
             }
         }
 
         val commonJvmLikeTest by creating {
             dependencies {
                 implementation(kotlin("test-junit"))
-                implementation("com.sparkjava:spark-core:$sparkVersion")
+                implementation(libs.spark.core)
                 runtimeOnly(kotlin("reflect"))
             }
         }

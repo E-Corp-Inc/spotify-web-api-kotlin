@@ -14,6 +14,8 @@ import com.adamratzman.spotify.models.serialization.nonstrictJson
 import com.adamratzman.spotify.models.serialization.toObject
 import com.adamratzman.spotify.utils.asList
 import com.adamratzman.spotify.utils.base64ByteEncode
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
 import kotlin.jvm.JvmOverloads
 
@@ -48,6 +50,11 @@ public sealed class SpotifyApi<T : SpotifyApi<T, B>, B : ISpotifyApiBuilder<T, B
 
             field = value
         }
+
+    // Spotify's refresh tokens are single-use/rotating: concurrent refresh calls sharing the
+    // same refresh token would race and only one would succeed. Serialize refreshes through this
+    // lock, and skip the network call entirely if another caller already refreshed while we waited.
+    private val tokenRefreshMutex = Mutex()
     public val expireTime: Long get() = token.expiresAt
     public var runExecutableFunctions: Boolean = true
 
@@ -216,18 +223,27 @@ public sealed class SpotifyApi<T : SpotifyApi<T, B>, B : ISpotifyApiBuilder<T, B
      * @throws IllegalStateException if [SpotifyApiOptions.refreshTokenProducer] is null
      */
     public suspend fun refreshToken(): Token {
-        val oldToken = token
-        val refreshedToken = spotifyApiOptions.refreshTokenProducer?.invoke(this)
-            ?: throw SpotifyException.ReAuthenticationNeededException(IllegalStateException("The refreshTokenProducer is null."))
+        val tokenObservedByCaller = token
 
-        token = refreshedToken
-        // Spotify may not provide a new refresh token
-        if (token.refreshToken == null) token.refreshToken = oldToken.refreshToken
-        
-        spotifyApiOptions.onTokenRefresh?.invoke(this@SpotifyApi)
-        spotifyApiOptions.afterTokenRefresh?.invoke(this@SpotifyApi)
-        
-        return oldToken
+        return tokenRefreshMutex.withLock {
+            val oldToken = token
+
+            // Another coroutine already refreshed the token while we were waiting for the lock.
+            // Reusing the (now rotated) refresh token here would just get rejected by Spotify, so skip it.
+            if (oldToken !== tokenObservedByCaller) return@withLock oldToken
+
+            val refreshedToken = spotifyApiOptions.refreshTokenProducer?.invoke(this)
+                ?: throw SpotifyException.ReAuthenticationNeededException(IllegalStateException("The refreshTokenProducer is null."))
+
+            token = refreshedToken
+            // Spotify may not provide a new refresh token
+            if (token.refreshToken == null) token.refreshToken = oldToken.refreshToken
+
+            spotifyApiOptions.onTokenRefresh?.invoke(this@SpotifyApi)
+            spotifyApiOptions.afterTokenRefresh?.invoke(this@SpotifyApi)
+
+            oldToken
+        }
     }
 
     /**

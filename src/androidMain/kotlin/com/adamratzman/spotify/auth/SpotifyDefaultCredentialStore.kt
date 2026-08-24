@@ -21,6 +21,9 @@ import com.adamratzman.spotify.refreshSpotifyClientToken
 import com.adamratzman.spotify.spotifyClientPkceApi
 import com.adamratzman.spotify.spotifyImplicitGrantApi
 import com.adamratzman.spotify.utils.logToConsole
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import androidx.core.content.edit
 
 /**
  * Provided credential store for holding current Spotify token credentials, allowing you to easily store and retrieve
@@ -34,7 +37,7 @@ import com.adamratzman.spotify.utils.logToConsole
 public class SpotifyDefaultCredentialStore(
     private val clientId: String,
     private val redirectUri: String,
-    applicationContext: Context
+    applicationContext: Context,
 ) {
     public companion object {
         /**
@@ -71,6 +74,11 @@ public class SpotifyDefaultCredentialStore(
 
     public var credentialTypeStored: CredentialType? = null
 
+    // Spotify's refresh tokens are single-use/rotating. Two concurrent calls to
+    // getSpotifyClientPkceApi() would otherwise both read the same stored refresh token and race
+    // to redeem it, with the loser getting an "Invalid refresh token" error. Serialize refreshes here.
+    private val tokenRefreshMutex = Mutex()
+
     private val masterKeyForEncryption =
         MasterKey.Builder(applicationContext).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
 
@@ -96,9 +104,9 @@ public class SpotifyDefaultCredentialStore(
         }
         set(value) {
             if (value == null) {
-                encryptedPreferences.edit().remove(SpotifyTokenExpiryKey).apply()
+                encryptedPreferences.edit { remove(SpotifyTokenExpiryKey) }
             } else {
-                encryptedPreferences.edit().putLong(SpotifyTokenExpiryKey, value).apply()
+                encryptedPreferences.edit { putLong(SpotifyTokenExpiryKey, value) }
             }
         }
 
@@ -107,29 +115,30 @@ public class SpotifyDefaultCredentialStore(
      */
     public var spotifyAccessToken: String?
         get() = encryptedPreferences.getString(SpotifyAccessTokenKey, null)
-        set(value) = encryptedPreferences.edit().putString(SpotifyAccessTokenKey, value).apply()
+        set(value) = encryptedPreferences.edit { putString(SpotifyAccessTokenKey, value) }
 
     /**
      * Get/set the Spotify refresh token.
      */
     public var spotifyRefreshToken: String?
         get() = encryptedPreferences.getString(SpotifyRefreshTokenKey, null)
-        set(value) = encryptedPreferences.edit().putString(SpotifyRefreshTokenKey, value).apply()
+        set(value) = encryptedPreferences.edit { putString(SpotifyRefreshTokenKey, value) }
 
     /**
      * Get/set the Spotify scope string.
      */
     public var spotifyScopeString: String?
         get() = encryptedPreferences.getString(SpotifyScopeStringKey, null)
-        set(value) = encryptedPreferences.edit().putString(SpotifyScopeStringKey, value).apply()
+        set(value) = encryptedPreferences.edit { putString(SpotifyScopeStringKey, value) }
 
     /**
      * Get/set the current Spotify PKCE code verifier.
      */
     public var currentSpotifyPkceCodeVerifier: String?
         get() = encryptedPreferences.getString(SpotifyCurrentPkceCodeVerifierKey, null)
-        set(value) = encryptedPreferences.edit().putString(SpotifyCurrentPkceCodeVerifierKey, value)
-            .apply()
+        set(value) = encryptedPreferences.edit {
+            putString(SpotifyCurrentPkceCodeVerifierKey, value)
+        }
 
     /**
      * Get/set the Spotify [Token] obtained from [spotifyToken].
@@ -185,14 +194,17 @@ public class SpotifyDefaultCredentialStore(
      * @param block Applied configuration to the [SpotifyClientApi]
      */
     public suspend fun getSpotifyClientPkceApi(block: ((SpotifyApiOptions).() -> Unit)? = null): SpotifyClientApi? {
-        val token = spotifyToken
-            ?: if (spotifyRefreshToken != null) {
+        val token = spotifyToken ?: tokenRefreshMutex.withLock {
+            // Re-check: another caller may have already refreshed and stored a new token
+            // while we were waiting for the lock.
+            spotifyToken ?: if (spotifyRefreshToken != null) {
                 val newToken = refreshSpotifyClientToken(clientId, null, spotifyRefreshToken, true)
                 spotifyToken = newToken
                 newToken
             } else {
                 return null
             }
+        }
 
         return spotifyClientPkceApi(
             clientId,
@@ -246,7 +258,7 @@ public enum class CredentialType {
 @RequiresApi(Build.VERSION_CODES.M)
 public fun Application.getDefaultCredentialStore(
     clientId: String,
-    redirectUri: String
+    redirectUri: String,
 ): SpotifyDefaultCredentialStore {
     return SpotifyDefaultCredentialStore(clientId, redirectUri, applicationContext)
 }

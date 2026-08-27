@@ -32,7 +32,7 @@ internal fun toast(context: Context?, message: String?, duration: Int = Toast.LE
 }
 
 internal fun logToConsole(message: String) {
-    Log.i("spotify-web-api-kotlin", message)
+    Log.d("spotify-web-api-kotlin", message)
 }
 
 public actual fun <T> runBlockingOnJvmAndNative(block: suspend () -> T): T {

@@ -12,7 +12,6 @@ import com.adamratzman.spotify.models.Token
 import com.adamratzman.spotify.models.TokenValidityResponse
 import com.adamratzman.spotify.models.serialization.nonstrictJson
 import com.adamratzman.spotify.models.serialization.toObject
-import com.adamratzman.spotify.utils.asList
 import com.adamratzman.spotify.utils.base64ByteEncode
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -94,7 +93,7 @@ public sealed class SpotifyApi<T : SpotifyApi<T, B>, B : ISpotifyApiBuilder<T, B
      * Obtain a map of all currently-cached requests
      */
     public fun getCache(): Map<SpotifyRequest, CacheState> =
-        endpoints.map { it.cache.cachedRequests.asList() }.flatten().toMap()
+        endpoints.flatMap { it.cache.snapshot().entries }.associate { it.toPair() }
 
     /**
      * Change the current [Token]'s access token

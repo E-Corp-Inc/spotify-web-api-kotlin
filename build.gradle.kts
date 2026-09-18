@@ -223,6 +223,8 @@ kotlin {
         }
 
         val commonJvmLikeTest by creating {
+            dependsOn(commonTest.get())
+
             dependencies {
                 implementation(kotlin("test-junit"))
                 implementation(libs.spark.core)

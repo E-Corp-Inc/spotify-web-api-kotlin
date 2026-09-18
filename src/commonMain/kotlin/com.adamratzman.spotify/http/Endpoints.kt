@@ -166,7 +166,7 @@ public abstract class SpotifyEndpoint(public val api: GenericSpotifyApi) {
                     }
                 }
             } as ReturnType
-        } catch (e: CancellationException) {
+        } catch (e: TimeoutCancellationException) {
             throw TimeoutException(
                 e.message
                     ?: "The request $spotifyRequest timed out after (${api.spotifyApiOptions.requestTimeoutMillis ?: (100_000)}ms.",
@@ -251,43 +251,61 @@ internal class EndpointBuilder(private val path: String, api: GenericSpotifyApi)
 }
 
 public class SpotifyCache {
-    public val cachedRequests: ConcurrentHashMap<SpotifyRequest, CacheState> = ConcurrentHashMap()
+    private val lock = SpotifyCacheLock()
+    private val cache: MutableMap<SpotifyRequest, CacheState> = mutableMapOf()
 
-    internal operator fun get(request: SpotifyRequest): CacheState? {
+    /**
+     * A snapshot of the currently cached requests.
+     *
+     * Mutating the returned map does not modify this cache. Use [clear] to remove all cached requests.
+     */
+    @Deprecated("Returns a detached snapshot; use snapshot() instead", ReplaceWith("snapshot()"))
+    public val cachedRequests: ConcurrentHashMap<SpotifyRequest, CacheState>
+        get() = lock.withLock {
+            ConcurrentHashMap<SpotifyRequest, CacheState>().also { snapshot ->
+                cache.forEach { (request, state) -> snapshot.put(request, state) }
+            }
+        }
+
+    internal operator fun get(request: SpotifyRequest): CacheState? = lock.withLock {
         checkCache(request)
-        return cachedRequests[request]
+        cache[request]
     }
 
-    internal operator fun set(request: SpotifyRequest, state: CacheState) {
-        if (request.api.useCache) cachedRequests.put(request, state)
-
+    internal operator fun set(request: SpotifyRequest, state: CacheState): Unit = lock.withLock {
+        if (request.api.useCache) cache[request] = state
         checkCache(request)
     }
 
-    internal operator fun minusAssign(request: SpotifyRequest) {
+    internal operator fun minusAssign(request: SpotifyRequest): Unit = lock.withLock {
         checkCache(request)
-        cachedRequests.remove(request)
+        cache.remove(request)
     }
 
-    public fun clear(): Unit = cachedRequests.clear()
+    public fun clear(): Unit = lock.withLock { cache.clear() }
+
+    /**
+     * Returns a read-only snapshot of the currently cached requests.
+     */
+    public fun snapshot(): Map<SpotifyRequest, CacheState> = lock.withLock { cache.toMap() }
 
     private fun checkCache(request: SpotifyRequest) {
         if (!request.api.useCache) {
-            clear()
+            cache.clear()
         } else {
-            cachedRequests.entries.removeAll { !it.value.isStillValid() }
+            cache.filterValues { !it.isStillValid() }.keys.forEach(cache::remove)
 
             val cacheLimit = request.api.spotifyApiOptions.cacheLimit
-            val cacheUse = cachedRequests.size
+            val cacheUse = cache.size
 
             if (cacheLimit != null && cacheUse > cacheLimit) {
                 val amountRemoveFromEach = ceil((cacheUse - cacheLimit).toDouble() / request.api.endpoints.size).toInt()
 
-                val entries = cachedRequests.entries
-
-                val toRemove = entries.sortedBy { it.value.expireBy }.take(amountRemoveFromEach)
-
-                if (toRemove.isNotEmpty()) entries.removeAll(toRemove)
+                cache.entries
+                    .sortedBy { it.value.expireBy }
+                    .take(amountRemoveFromEach)
+                    .map { it.key }
+                    .forEach(cache::remove)
             }
         }
     }
